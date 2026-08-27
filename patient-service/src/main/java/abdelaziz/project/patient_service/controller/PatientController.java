@@ -37,7 +37,5 @@ public class PatientController {
         PatientResponseDto createdPatient = patientService.createPatient(entity);
         return ResponseEntity.ok().body(createdPatient);
     }
-    
-    
 
 }
