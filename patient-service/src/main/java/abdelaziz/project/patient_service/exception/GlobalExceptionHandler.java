@@ -36,4 +36,17 @@ public class GlobalExceptionHandler {
         error.put("error", "Email Already exists");
         return ResponseEntity.badRequest().body(error);
     }
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<Map<String,String>> 
+    handlePatientNotFoundException(PatientNotFoundException ex
+) {
+        //this is for logging the exception message to the console or a log file for debugging purposes
+        logger.error("PatientNotFoundException: " + ex.getMessage());
+        
+        // this is for creating a response body that contains the error message to be sent back to the client
+        Map<String,String> error = new HashMap<>();
+        error.put("error", "Patient Not Found");
+        return ResponseEntity.badRequest().body(error);
+    }
 }
