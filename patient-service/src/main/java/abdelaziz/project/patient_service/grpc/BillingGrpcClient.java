@@ -74,8 +74,7 @@ public class BillingGrpcClient {
         logger.info(
         "Returning billing response: accountId={}, status={}",
         response.getAccountId(),
-        response.getStatus()
-);
+        response.getStatus());
         
         return response;
     }
