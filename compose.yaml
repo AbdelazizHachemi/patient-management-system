@@ -53,7 +53,7 @@ services:
       context: .
       dockerfile: analytics-service/Dockerfile
     ports:
-      - "4002:8080"
+      - "4002:4002"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:

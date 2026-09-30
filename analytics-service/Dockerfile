@@ -19,5 +19,5 @@ COPY --from=build /app/analytics-service/target/*.jar app.jar
 RUN chown spring:spring app.jar
 USER spring
 
-EXPOSE 8080
+EXPOSE 4002
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
