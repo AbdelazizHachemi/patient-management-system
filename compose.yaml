@@ -48,6 +48,18 @@ services:
       - "4001:4001"
       - "9001:9001"
 
+  analytics-service:
+    build:
+      context: .
+      dockerfile: analytics-service/Dockerfile
+    ports:
+      - "4002:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
+
   patient-service:
     build:
       context: .
@@ -63,6 +75,7 @@ services:
       SERVER_PORT: 4000
       BILLING_GRPC_HOST: billing-service
       BILLING_GRPC_PORT: 9001
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       postgres:
         condition: service_healthy

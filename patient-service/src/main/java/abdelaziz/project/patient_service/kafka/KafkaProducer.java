@@ -28,10 +28,8 @@ public class KafkaProducer {
                 .build();
 
         try {
-            
             kafkaTemplate.send("patient", event.toByteArray());
         } catch (Exception e) {
-            // TODO: handle exception
             logger.error("Failed to send event to Kafka: {}", e.getMessage());
             
         }        
