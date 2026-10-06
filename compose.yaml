@@ -15,6 +15,23 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  auth-service-db:
+    container_name: auth-service-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5001:5432"
+    volumes:
+      - auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d authdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 
   kafka:
     image: apache/kafka:latest
@@ -82,9 +99,24 @@ services:
       billing-service:
         condition: service_started
 
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    ports:
+      - "4004:4004"
+    depends_on:
+      patient-service:
+        condition: service_started
+      billing-service:
+        condition: service_started
+      analytics-service:
+        condition: service_started
+
 volumes:
   postgres-data:
   kafka-data:
+  auth-data:
 
 networks:
   default:
