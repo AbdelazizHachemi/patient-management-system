@@ -2,8 +2,10 @@ package abdelaziz.project.auth_service.services;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import abdelaziz.project.auth_service.Utils.JwtUtils;
 import abdelaziz.project.auth_service.dto.LoginRequestDTO;
 import abdelaziz.project.auth_service.model.User;
 
@@ -11,18 +13,31 @@ import abdelaziz.project.auth_service.model.User;
 public class AuthService {
     
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtil;
 
-    public AuthService(UserService userService) {
+    public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtils jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public Optional<String> authenticate(LoginRequestDTO loginRequestDTO) {
         
         Optional<String> token = userService.findByEmail(loginRequestDTO.getEmail())
-        .filter(u -> passwordEncoder.matchs(loginRequestDTO.getPassword(),u.getPassword()))
+        .filter(u -> passwordEncoder.matches(loginRequestDTO.getPassword(),u.getPassword()))
         .map(u -> jwtUtil.generateToken(u.getEmail(),u.getRole()));
         
         
         return token;
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            jwtUtil.validateToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
