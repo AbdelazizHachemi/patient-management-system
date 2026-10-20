@@ -17,45 +17,41 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-@RestController 
+@RestController
 public class AuthController {
     private final AuthService authservice;
-    
+
     public AuthController(AuthService authservice) {
         this.authservice = authservice;
     }
 
-    @Operation (summary = "Login endpoint", description = "Authenticate user and return a JWT token")
+    @Operation(summary = "Login endpoint", description = "Authenticate user and return a JWT token")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        //TODO: process POST request
-        
+        // TODO: process POST request
+
         Optional<String> tokenOptional = authservice.authenticate(loginRequest);
 
-        if(tokenOptional.isEmpty()){
+        if (tokenOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String token = tokenOptional.get();
 
-
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
- 
-    @Operation (summary = "Validate token", description = "Validate JWT token")
+
+    @Operation(summary = "Validate token", description = "Validate JWT token")
     @GetMapping("/validate")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) {
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         return authservice.validateToken(authHeader.substring(7))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    
+
     }
-    
 
 }

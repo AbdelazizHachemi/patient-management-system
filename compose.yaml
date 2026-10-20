@@ -129,6 +129,8 @@ services:
         condition: service_started
       analytics-service:
         condition: service_started
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:4005
 
 volumes:
   postgres-data:

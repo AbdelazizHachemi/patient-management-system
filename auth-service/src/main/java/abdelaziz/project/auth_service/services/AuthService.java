@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import abdelaziz.project.auth_service.Utils.JwtUtils;
 import abdelaziz.project.auth_service.dto.LoginRequestDTO;
-import abdelaziz.project.auth_service.model.User;
 
 @Service 
 public class AuthService {
